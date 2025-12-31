@@ -52,7 +52,8 @@ io.on("connection", (socket: Socket) => {
     })
 
     // Broadcast à tous sauf l'émetteur
-    socket.to(roomId).emit("video-action", action)
+    //socket.to(roomId).emit("video-action", action)
+    io.to(roomId).emit("video-action", action)
   })
 
   socket.on("leave-room", ({ roomId }) => {
