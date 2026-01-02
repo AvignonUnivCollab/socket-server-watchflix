@@ -56,6 +56,28 @@ io.on("connection", (socket: Socket) => {
     io.to(roomId).emit("video-action", action)
   })
 
+  socket.on("new-message", ({ roomId, message, sender }) => {
+    socket.to(roomId).emit("new-message", {
+      message,
+      sender,
+    })
+  })
+
+  socket.on("playlist-add", ({ roomId, item }) => {
+    // Broadcast à tout le salon
+    io.to(roomId).emit("playlist-updated", {
+      action: "ADD",
+      item,
+    })
+  })
+
+  socket.on("playlist-remove", ({ roomId, videoId }) => {
+    io.to(roomId).emit("playlist-updated", {
+      action: "REMOVE",
+      videoId,
+    })
+  })
+
   socket.on("leave-room", ({ roomId }) => {
     socket.leave(roomId)
     console.log(`${socket.id} quitte le salon ${roomId}`)
